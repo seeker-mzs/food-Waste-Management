@@ -1,0 +1,24 @@
+<!-- waste_app/templates/waste_app/logout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You have been logged out</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'icon\icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>You have been logged out</h1>
+        </header>
+
+        <section>
+            <p>You have successfully logged out. You can now log in again to continue.</p>
+            <a href="{% url 'login' %}">Go to Login Page</a>
+        </section>
+    </div>
+</body>
+</html>

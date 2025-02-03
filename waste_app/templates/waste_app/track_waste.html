@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Tracking</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'icon\icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Waste Tracking</h1>
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'donate_food' %}">Donate Food</a>
+                <a href="{% url 'request_food' %}">Request Food</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </header>
+
+        <section class="waste-form">
+            <h2>Report Wasted Food</h2>
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="id_donation">Select Donation:</label>
+                {{ form.donation }}
+
+                <label for="id_wasted_quantity">Wasted Quantity (kg):</label>
+                {{ form.wasted_quantity }}
+
+                <label for="id_reason_for_waste">Reason for Waste:</label>
+                {{ form.reason_for_waste }}
+
+                <label for="id_waste_date">Waste Date:</label>
+                {{ form.waste_date }}
+
+                <button type="submit">Submit Waste Report</button>
+            </form>
+
+            {% if form.errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="waste-list">
+            <h2>Wasted Food Reports</h2>
+            <ul>
+                {% for waste in waste_tracks %}
+                    <li>
+                        <strong>{{ waste.donation.food_type }}</strong> - Wasted: {{ waste.wasted_quantity }} kg
+                        <br>Reason: {{ waste.get_reason_for_waste_display }} - Date: {{ waste.waste_date }}
+                    </li>
+                {% empty %}
+                    <li>No waste records found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

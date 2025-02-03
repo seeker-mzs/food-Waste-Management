@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Waste Management</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'icon\icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="static/CSS/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Food Waste Management System</h1>
+            <nav>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'donate_food' %}">Donate Food</a>
+                    <a href="{% url 'track_waste' %}">Track Wasted Food</a>
+                    <a href="{% url 'request_food' %}">Request Food</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        {% if user.is_authenticated %}
+            <section class="donations">
+                <h2>Available Donations</h2>
+                {% if donations %}
+                    <ul>
+                        {% for donation in donations %}
+                            <li>
+                                <strong>{{ donation.food_type }}</strong> - Donated by {{ donation.donor.username }}<br>
+                                Quantity: {{ donation.quantity }} | Expiry: {{ donation.expiration_date }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No donations available at the moment.</p>
+                {% endif %}
+            </section>
+
+            <section class="waste-tracking">
+                <h2>Waste Tracking</h2>
+                {% if waste_tracks %}
+                    <ul>
+                        {% for waste in waste_tracks %}
+                            <li>
+                                <strong>{{ waste.donation.food_type }}</strong> - Wasted Quantity: {{ waste.wasted_quantity }} <br>
+                                Reason: {{ waste.get_reason_for_waste_display }} | Date: {{ waste.waste_date }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No waste records available.</p>
+                {% endif %}
+            </section>
+
+            <section class="requests">
+                <h2>Food Requests</h2>
+                {% if requests %}
+                    <ul>
+                        {% for request in requests %}
+                            <li>
+                                <strong>{{ request.user.username }}</strong> requested {{ request.requested_quantity }} of {{ request.food_type }}<br>
+                                Requested on: {{ request.request_date }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No food requests available.</p>
+                {% endif %}
+            </section>
+        {% else %}
+            <section class="auth-message">
+                <h2>Welcome to the Food Waste Management System</h2>
+                <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Sign Up</a> to access the system.</p>
+            </section>
+        {% endif %}
+    </div>
+</body>
+</html>

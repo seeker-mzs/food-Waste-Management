@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Food</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'icon\icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Request Food</h1>
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'donate_food' %}">Donate Food</a>
+                <a href="{% url 'track_waste' %}">Track Waste</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </header>
+
+        <section class="request-form">
+            <h2>Food Request Form</h2>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <label for="id_food_type">Food Type:</label>
+                {{ form.food_type }}
+
+                <label for="id_requested_quantity">Requested Quantity (kg):</label>
+                {{ form.requested_quantity }}
+
+                <button type="submit">Request Food</button>
+            </form>
+
+            {% if form.errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>
