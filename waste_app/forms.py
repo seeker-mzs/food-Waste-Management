@@ -5,7 +5,10 @@ from django.contrib.auth.models import User
 class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
-        fields = '__all__' 
+        fields = ['food_type', 'quantity', 'expiration_date']
+        widgets = {
+            'expiration_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class WasteTrackingForm(forms.ModelForm):
     class Meta:
@@ -15,7 +18,7 @@ class WasteTrackingForm(forms.ModelForm):
 class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
-        fields = '__all__'
+        fields = ['food_type', 'requested_quantity']  
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)

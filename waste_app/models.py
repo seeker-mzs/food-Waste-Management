@@ -1,25 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 class Donation(models.Model):
-    donor_name = models.CharField(max_length=100)
+    donor = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     food_type = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
-    donation_date = models.DateField()  # Remove auto_now_add=True if you want the user to input it
+    donation_date = models.DateField(auto_now_add=True)
     expiration_date = models.DateField()
-
+    
     def __str__(self):
-        return f"{self.food_type} - {self.donor_name}"
+        return f"{self.food_type} - Donated by {self.donor.username}"
 
 
 class Request(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    food_type = models.CharField(max_length=100)
-    requested_quantity = models.PositiveIntegerField()
-    request_date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name="food_requests",
+        verbose_name="Requested by"
+    )
+    food_type = models.CharField(
+        max_length=100, 
+        verbose_name="Type of Food"
+    )
+    requested_quantity = models.PositiveIntegerField(
+        verbose_name="Requested Quantity (kg)"
+    )
+    request_date = models.DateField(
+        auto_now_add=True, 
+        verbose_name="Request Date"
+    )
 
     def __str__(self):
-        return f"{self.food_type} - {self.requested_quantity} units (Requested by {self.user.username})"
+        return f"{self.food_type} - {self.requested_quantity} kg (Requested by {self.user.username})"
 
 class WasteTracking(models.Model):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)

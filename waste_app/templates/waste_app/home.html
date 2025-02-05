@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Waste Management</title>
     {% load static %}
-    <link rel="icon" href="{% static 'icon\icon.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="static/CSS/styles.css">
+    <link rel="icon" href="{% static 'icon/icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
 </head>
 <body>
     <div class="container">
@@ -23,6 +23,12 @@
                     <a href="{% url 'signup' %}">Sign Up</a>
                 {% endif %}
             </nav>
+
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <span>{{ user.username }}</span>
+                </div>
+            {% endif %}
         </header>
 
         {% if user.is_authenticated %}
@@ -33,7 +39,7 @@
                         {% for donation in donations %}
                             <li>
                                 <strong>{{ donation.food_type }}</strong> - Donated by {{ donation.donor.username }}<br>
-                                Quantity: {{ donation.quantity }} | Expiry: {{ donation.expiration_date }}
+                                Quantity: {{ donation.quantity }} kg | Donated on: {{ donation.donation_date }} | Expiry: {{ donation.expiration_date }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -48,7 +54,7 @@
                     <ul>
                         {% for waste in waste_tracks %}
                             <li>
-                                <strong>{{ waste.donation.food_type }}</strong> - Wasted Quantity: {{ waste.wasted_quantity }} <br>
+                                <strong>{{ waste.donation.food_type }}</strong> - Wasted Quantity: {{ waste.wasted_quantity }} kg <br>
                                 Reason: {{ waste.get_reason_for_waste_display }} | Date: {{ waste.waste_date }}
                             </li>
                         {% endfor %}
@@ -64,7 +70,7 @@
                     <ul>
                         {% for request in requests %}
                             <li>
-                                <strong>{{ request.user.username }}</strong> requested {{ request.requested_quantity }} of {{ request.food_type }}<br>
+                                <strong>{{ request.user.username }}</strong> requested {{ request.requested_quantity }} kg of {{ request.food_type }}<br>
                                 Requested on: {{ request.request_date }}
                             </li>
                         {% endfor %}

@@ -34,12 +34,12 @@ def home(request):
     donations = Donation.objects.all()
     waste_tracks = WasteTracking.objects.all()
     requests = Request.objects.all()
-    
     return render(request, 'waste_app/home.html', {
-        'donations': donations, 
-        'waste_tracks': waste_tracks, 
-        'requests': requests
+        'donations': donations,
+        'waste_tracks': waste_tracks,
+        'requests': requests,
     })
+
 
 # Signup View
 def signup(request):
@@ -73,14 +73,17 @@ def logout_view(request):
 # Donate Food View
 @login_required
 def donate_food(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = DonationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            donation = form.save(commit=False)
+            donation.donor = request.user  # Auto-assign donor
+            donation.save()
+            return redirect("home")  # Redirect to home or success page
     else:
         form = DonationForm()
-    return render(request, 'waste_app/donate_food.html', {'form': form})
+    
+    return render(request, "waste_app/donate_food.html", {"form": form})
 
 # Request Food View
 @login_required
