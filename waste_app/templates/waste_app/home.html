@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Food Waste Management System</h1>
+            <h1>FoodCycle</h1>
             <nav>
                 {% if user.is_authenticated %}
                     <a href="{% url 'donate_food' %}">Donate Food</a>
@@ -81,7 +81,7 @@
             </section>
         {% else %}
             <section class="auth-message">
-                <h2>Welcome to the Food Waste Management System</h2>
+                <h2>Welcome to the FoodCycle</h2>
                 <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Sign Up</a> to access the system.</p>
             </section>
         {% endif %}
